@@ -88,12 +88,21 @@ function Nav() {
           <a href="#approach" className="hover:text-cocoa-deep">Approach</a>
           <a href="#journal" className="hover:text-cocoa-deep">Journal</a>
         </nav>
-        <a
-          href="#contact"
-          className="hidden items-center gap-2 rounded-full bg-cocoa-deep px-5 py-2.5 text-xs uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex"
-        >
-          Book a Consultation
-        </a>
+        <div className="hidden items-center gap-2 md:flex">
+          <a
+            href={TEL_URL}
+            aria-label={`Call ${PHONE_DISPLAY}`}
+            className="inline-flex items-center gap-2 rounded-full border border-cocoa-deep/25 px-4 py-2.5 text-xs uppercase tracking-[0.18em] text-cocoa-deep transition hover:border-cocoa-deep"
+          >
+            <span aria-hidden>☎</span> Call
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 rounded-full bg-cocoa-deep px-5 py-2.5 text-xs uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa"
+          >
+            Book a Consultation
+          </a>
+        </div>
       </div>
     </header>
   );
