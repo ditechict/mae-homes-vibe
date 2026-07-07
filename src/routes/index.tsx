@@ -885,6 +885,7 @@ function Home() {
       <Cities />
       <Contact />
       <Footer />
+      <FloatingContact />
     </main>
   );
 }
