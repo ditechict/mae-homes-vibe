@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
 import kitchen from "@/assets/interior-kitchen.jpg";
 import bedroom from "@/assets/interior-bedroom.jpg";
@@ -12,10 +13,19 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" },
-      { name: "description", content: "Trusted real estate partner across Lagos, Abuja and the Diaspora. Land, residential, commercial, investments and considered interior design." },
+      { name: "description", content: "Trusted real estate and interior design partner across Lagos, Abuja and the Diaspora. Browse curated properties, land and investment opportunities." },
+      { property: "og:title", content: "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" },
+      { property: "og:description", content: "Boutique real estate and interior design firm in Lagos and Abuja. Land, residential, commercial and considered interiors." },
+      { property: "og:url", content: "/" },
+      { property: "og:image", content: heroLiving },
+      { name: "twitter:title", content: "Mae & Homes — Real Estate & Interior Design" },
+      { name: "twitter:description", content: "Curated homes, land and interiors across Lagos & Abuja." },
+      { name: "twitter:image", content: heroLiving },
     ],
+    links: [{ rel: "canonical", href: "/" }],
   }),
 });
+
 
 function Monogram({ className = "" }: { className?: string }) {
   return (
