@@ -261,34 +261,131 @@ function Services() {
   );
 }
 
-const properties = [
+type Property = {
+  id: string;
+  img: string;
+  name: string;
+  city: "Lagos" | "Abuja";
+  location: string;
+  price: string;
+  specs: string;
+  status: "For Sale" | "For Lease" | "Off-Plan";
+  beds: number;
+  description: string;
+  features: string[];
+};
+
+const properties: Property[] = [
   {
+    id: "ikota-residence",
     img: propertyLekki,
     name: "The Ikota Residence",
-    location: "Megamound Estate, Lekki, Lagos",
+    city: "Lagos",
+    location: "Megamound Estate, Lekki",
     price: "₦550M",
     specs: "5 Bed · Detached Duplex · BQ · Pool",
     status: "For Sale",
+    beds: 5,
+    description:
+      "A quietly grand five-bedroom detached duplex set behind mature landscaping in Megamound. Double-height living, a chef's kitchen, and a private pool courtyard designed for slow evenings.",
+    features: ["Private pool", "Chef's kitchen", "Staff quarters", "Smart security", "24/7 estate power", "Governor's Consent"],
   },
   {
+    id: "maitama-terrace",
     img: propertyAbuja,
     name: "Maitama Terrace",
-    location: "Maitama District, Abuja",
+    city: "Abuja",
+    location: "Maitama District",
     price: "₦480M",
     specs: "4 Bed · Contemporary · Smart Home",
     status: "For Sale",
+    beds: 4,
+    description:
+      "A contemporary four-bedroom terrace in the heart of Maitama. Warm oak joinery, integrated smart-home controls, and a north-facing garden that stays cool through the harmattan.",
+    features: ["Smart home", "Solar backup", "Fitted wardrobes", "Landscaped garden", "CofO", "Gated cluster"],
   },
   {
+    id: "oniru-serviced",
     img: bedroom,
     name: "Oniru Serviced Apartment",
-    location: "Oniru, Victoria Island, Lagos",
+    city: "Lagos",
+    location: "Oniru, Victoria Island",
     price: "₦85M/yr",
     specs: "3 Bed · Fully Furnished · Concierge",
     status: "For Lease",
+    beds: 3,
+    description:
+      "A fully furnished three-bedroom serviced apartment moments from Landmark. Concierge, gym, and a rooftop lounge — designed for executives and long-stay diaspora clients.",
+    features: ["Fully furnished", "Concierge", "Gym & pool", "Backup power", "Short & long lease"],
+  },
+  {
+    id: "asokoro-villa",
+    img: dining,
+    name: "Asokoro Garden Villa",
+    city: "Abuja",
+    location: "Asokoro",
+    price: "₦720M",
+    specs: "6 Bed · Villa · Cinema · Staff Wing",
+    status: "For Sale",
+    beds: 6,
+    description:
+      "A six-bedroom garden villa on a quiet Asokoro cul-de-sac. Formal and family living wings, a private cinema, and a dedicated staff block with separate entry.",
+    features: ["Private cinema", "Formal dining", "Staff wing", "Borehole", "Mature garden", "CofO"],
+  },
+  {
+    id: "ikoyi-penthouse",
+    img: kitchen,
+    name: "Old Ikoyi Penthouse",
+    city: "Lagos",
+    location: "Bourdillon, Ikoyi",
+    price: "₦1.2B",
+    specs: "4 Bed · Penthouse · Private Lift",
+    status: "Off-Plan",
+    beds: 4,
+    description:
+      "A rare full-floor penthouse on Bourdillon with private lift lobby, wraparound terrace and lagoon views. Delivery Q3 next year — a considered investment position.",
+    features: ["Private lift", "Wraparound terrace", "Lagoon views", "Concierge", "Off-plan pricing"],
+  },
+  {
+    id: "katampe-land",
+    img: propertyAbuja,
+    name: "Katampe Ext. Land Parcel",
+    city: "Abuja",
+    location: "Katampe Extension",
+    price: "₦180M",
+    specs: "1,200 sqm · CofO · Corner Piece",
+    status: "For Sale",
+    beds: 0,
+    description:
+      "A 1,200 sqm corner parcel in one of Abuja's most closely watched growth corridors. Fully documented with CofO — ready to build or hold.",
+    features: ["1,200 sqm", "Corner piece", "CofO", "Tarred road", "Growth corridor"],
   },
 ];
 
+type CityFilter = "All" | "Lagos" | "Abuja";
+const cityFilters: CityFilter[] = ["All", "Lagos", "Abuja"];
+
 function Properties() {
+  const [city, setCity] = useState<CityFilter>("All");
+  const [active, setActive] = useState<Property | null>(null);
+
+  const visible = useMemo(
+    () => (city === "All" ? properties : properties.filter((p) => p.city === city)),
+    [city],
+  );
+
+  useEffect(() => {
+    if (!active) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActive(null);
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [active]);
+
   return (
     <section id="properties" className="mx-auto max-w-7xl px-6 py-28 md:py-40">
       <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
@@ -303,13 +400,34 @@ function Properties() {
         </a>
       </div>
 
-      <div className="mt-16 grid gap-10 md:grid-cols-3">
-        {properties.map((p) => (
-          <article key={p.name} className="group cursor-pointer">
+      <div className="mt-12 flex flex-wrap items-center gap-3">
+        {cityFilters.map((c) => {
+          const activeChip = city === c;
+          const count = c === "All" ? properties.length : properties.filter((p) => p.city === c).length;
+          return (
+            <button
+              key={c}
+              onClick={() => setCity(c)}
+              aria-pressed={activeChip}
+              className={`rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.18em] transition ${
+                activeChip
+                  ? "border-cocoa-deep bg-cocoa-deep text-cream"
+                  : "border-cocoa-deep/20 bg-transparent text-cocoa-deep hover:border-cocoa-deep/50"
+              }`}
+            >
+              {c} <span className={activeChip ? "text-gold" : "text-cocoa/50"}>· {count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-12 grid gap-10 md:grid-cols-3">
+        {visible.map((p) => (
+          <article key={p.id} className="group cursor-pointer" onClick={() => setActive(p)}>
             <div className="relative overflow-hidden rounded-sm bg-sand">
               <img
                 src={p.img}
-                alt={p.name}
+                alt={`${p.name} — ${p.location}`}
                 className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105"
                 loading="lazy"
                 width={1200}
@@ -318,6 +436,12 @@ function Properties() {
               <span className="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cocoa-deep">
                 {p.status}
               </span>
+              <span className="absolute right-4 top-4 rounded-full bg-cocoa-deep/85 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cream">
+                {p.city}
+              </span>
+              <div className="absolute inset-x-0 bottom-0 translate-y-full bg-cocoa-deep/85 p-4 text-center text-[10px] uppercase tracking-[0.25em] text-cream transition group-hover:translate-y-0">
+                View details →
+              </div>
             </div>
             <div className="mt-6 flex items-start justify-between gap-4">
               <div>
@@ -330,9 +454,91 @@ function Properties() {
           </article>
         ))}
       </div>
+
+      {visible.length === 0 && (
+        <div className="mt-16 rounded-sm border border-dashed border-cocoa-deep/20 p-16 text-center text-muted-foreground">
+          No listings match this filter right now — try another city.
+        </div>
+      )}
+
+      {active && <PropertyModal property={active} onClose={() => setActive(null)} />}
     </section>
   );
 }
+
+function PropertyModal({ property, onClose }: { property: Property; onClose: () => void }) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={property.name}
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-cocoa-deep/80 p-4 backdrop-blur-sm md:p-10"
+      onClick={onClose}
+    >
+      <div
+        className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-sm bg-cream shadow-elegant md:flex-row"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-cream/95 text-cocoa-deep transition hover:bg-gold"
+        >
+          ✕
+        </button>
+        <div className="relative md:w-1/2">
+          <img
+            src={property.img}
+            alt={`${property.name} — ${property.location}`}
+            className="h-64 w-full object-cover md:h-full"
+          />
+          <span className="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cocoa-deep">
+            {property.status}
+          </span>
+        </div>
+        <div className="flex flex-1 flex-col overflow-y-auto p-8 md:p-10">
+          <div className="text-xs uppercase tracking-[0.25em] text-cocoa">{property.city} · {property.status}</div>
+          <h3 className="mt-3 font-display text-3xl text-cocoa-deep md:text-4xl">{property.name}</h3>
+          <div className="mt-2 text-muted-foreground">{property.location}</div>
+          <div className="mt-6 flex items-baseline justify-between border-y border-cocoa-deep/15 py-4">
+            <div className="font-display text-3xl text-gold">{property.price}</div>
+            <div className="text-xs uppercase tracking-[0.15em] text-cocoa/80">{property.specs}</div>
+          </div>
+          <p className="mt-6 leading-relaxed text-cocoa-deep/80">{property.description}</p>
+          <div className="mt-8">
+            <div className="text-xs uppercase tracking-[0.2em] text-cocoa">Features</div>
+            <ul className="mt-4 grid grid-cols-2 gap-2 text-sm text-cocoa-deep">
+              {property.features.map((f) => (
+                <li key={f} className="flex items-start gap-2">
+                  <span className="mt-1 text-gold">✦</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-auto flex flex-wrap gap-3 pt-8">
+            <a
+              href="#contact"
+              onClick={onClose}
+              className="flex-1 rounded-full bg-cocoa-deep px-6 py-3.5 text-center text-xs uppercase tracking-[0.2em] text-cream transition hover:bg-cocoa"
+            >
+              Request a viewing
+            </a>
+            <a
+              href={`https://wa.me/2348029026160?text=${encodeURIComponent(`Hi Mae & Homes, I'd like to know more about ${property.name} (${property.location}).`)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 rounded-full border border-cocoa-deep/30 px-6 py-3.5 text-center text-xs uppercase tracking-[0.2em] text-cocoa-deep transition hover:border-gold hover:text-gold"
+            >
+              WhatsApp us
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function Interiors() {
   return (
