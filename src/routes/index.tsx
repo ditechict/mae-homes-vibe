@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
 import kitchen from "@/assets/interior-kitchen.jpg";
 import bedroom from "@/assets/interior-bedroom.jpg";
@@ -7,12 +8,53 @@ import propertyLekki from "@/assets/property-lekki.jpg";
 import propertyAbuja from "@/assets/property-abuja.jpg";
 import founder from "@/assets/founder.jpg";
 
+const SITE_TITLE = "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja";
+const SITE_DESC = "Boutique real estate and interior design firm across Lagos, Abuja and the Diaspora. Land, residential, commercial, investments and considered interiors.";
+
+// Contact constants — used by header CTA, floating buttons, and footer.
+const PHONE_DISPLAY = "+234 802 902 6160";
+const PHONE_TEL = "+2348029026160";
+const WHATSAPP_NUMBER = "2348029026160";
+const WHATSAPP_MSG = encodeURIComponent(
+  "Hello Mae & Homes, I'd like to speak with an advisor about a property.",
+);
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MSG}`;
+const TEL_URL = `tel:${PHONE_TEL}`;
+
 export const Route = createFileRoute("/")({
   component: Home,
   head: () => ({
     meta: [
-      { title: "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" },
-      { name: "description", content: "Trusted real estate partner across Lagos, Abuja and the Diaspora. Land, residential, commercial, investments and considered interior design." },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESC },
+      { property: "og:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { property: "og:site_name", content: "Mae & Homes" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SITE_TITLE },
+      { name: "twitter:description", content: SITE_DESC },
+      { name: "keywords", content: "real estate Lagos, real estate Abuja, Lekki property, Maitama property, interior design Nigeria, land investment Nigeria, Mae and Homes" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "RealEstateAgent",
+          name: "Mae & Homes",
+          description: SITE_DESC,
+          telephone: PHONE_DISPLAY,
+          email: "maeandhomes@gmail.com",
+          areaServed: ["Lagos", "Abuja", "Nigeria"],
+          address: [
+            { "@type": "PostalAddress", addressLocality: "Lagos", addressCountry: "NG" },
+            { "@type": "PostalAddress", addressLocality: "Abuja", addressCountry: "NG" },
+          ],
+        }),
+      },
     ],
   }),
 });
