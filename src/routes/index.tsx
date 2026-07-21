@@ -380,7 +380,7 @@ const properties: Property[] = [
   },
   {
     id: "ikoyi-penthouse",
-    img: kitchen,
+    img: livingLuxe,
     name: "Old Ikoyi Penthouse",
     city: "Lagos",
     location: "Bourdillon, Ikoyi",
