@@ -191,7 +191,8 @@ function Marquee() {
 
 function About() {
   return (
-    <section id="approach" className="mx-auto max-w-7xl px-6 py-28 md:py-40">
+    <section id="about" className="mx-auto max-w-7xl px-6 py-28 md:py-40">
+      <span id="approach" className="sr-only" aria-hidden="true" />
       <div className="grid gap-16 md:grid-cols-[1fr_1.2fr] md:gap-24">
         <div>
           <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Our Approach</div>
