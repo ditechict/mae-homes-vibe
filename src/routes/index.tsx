@@ -609,9 +609,9 @@ function Interiors() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-16 md:grid-cols-[1fr_1fr] md:items-center md:gap-24">
           <div className="grid grid-cols-2 gap-4">
-            <img src={kitchen} alt="Warm minimalist kitchen with arched pantry" className="col-span-2 aspect-[5/4] w-full rounded-sm object-cover shadow-soft" loading="lazy" width={1200} height={1400} />
-            <img src={dining} alt="Elegant dining space" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
-            <img src={bedroom} alt="Warm bedroom design" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
+            <img src={kitchenWarm} alt="Warm timber and marble kitchen with hidden pantry" className="col-span-2 aspect-[5/4] w-full rounded-sm object-cover shadow-soft" loading="lazy" width={1200} height={960} />
+            <img src={kitchenMarble} alt="Modern black and marble kitchen with cove lighting" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
+            <img src={bedroomBeige} alt="Serene beige bedroom in neutral tones" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
           </div>
           <div>
             <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Interiors</div>
