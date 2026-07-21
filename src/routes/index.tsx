@@ -1,12 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
-import kitchen from "@/assets/interior-kitchen.jpg";
-import bedroom from "@/assets/interior-bedroom.jpg";
-import dining from "@/assets/interior-dining.jpg";
-import propertyLekki from "@/assets/property-lekki.jpg";
-import propertyAbuja from "@/assets/property-abuja.jpg";
+import kitchenWarmAsset from "@/assets/kitchen-warm.jpg.asset.json";
+import kitchenMarbleAsset from "@/assets/kitchen-marble.jpg.asset.json";
+import livingLuxeAsset from "@/assets/living-luxe.jpg.asset.json";
+import livingClassicAsset from "@/assets/living-classic.jpg.asset.json";
+import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
+import exteriorModernAsset from "@/assets/exterior-modern.jpg.asset.json";
+import exteriorWhiteAsset from "@/assets/exterior-white.jpg.asset.json";
+import landParcel from "@/assets/land-parcel.jpg";
 import founder from "@/assets/founder.jpg";
+
+const kitchenWarm = kitchenWarmAsset.url;
+const kitchenMarble = kitchenMarbleAsset.url;
+const livingLuxe = livingLuxeAsset.url;
+const livingClassic = livingClassicAsset.url;
+const bedroomBeige = bedroomBeigeAsset.url;
+const exteriorModern = exteriorModernAsset.url;
+const exteriorWhite = exteriorWhiteAsset.url;
+// Legacy aliases used further down the file
+const kitchen = kitchenWarm;
+const bedroom = bedroomBeige;
+const dining = livingLuxe;
 
 export const Route = createFileRoute("/")({
   component: Home,
