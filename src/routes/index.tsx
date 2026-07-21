@@ -18,10 +18,6 @@ const livingClassic = livingClassicAsset.url;
 const bedroomBeige = bedroomBeigeAsset.url;
 const exteriorModern = exteriorModernAsset.url;
 const exteriorWhite = exteriorWhiteAsset.url;
-// Legacy aliases used further down the file
-const kitchen = kitchenWarm;
-const bedroom = bedroomBeige;
-const dining = livingLuxe;
 
 export const Route = createFileRoute("/")({
   component: Home,
