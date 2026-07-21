@@ -366,7 +366,7 @@ const properties: Property[] = [
   },
   {
     id: "asokoro-villa",
-    img: dining,
+    img: livingClassic,
     name: "Asokoro Garden Villa",
     city: "Abuja",
     location: "Asokoro",
