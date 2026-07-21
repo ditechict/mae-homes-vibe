@@ -338,7 +338,7 @@ const properties: Property[] = [
   },
   {
     id: "maitama-terrace",
-    img: propertyAbuja,
+    img: exteriorWhite,
     name: "Maitama Terrace",
     city: "Abuja",
     location: "Maitama District",
