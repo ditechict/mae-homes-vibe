@@ -394,7 +394,7 @@ const properties: Property[] = [
   },
   {
     id: "katampe-land",
-    img: propertyAbuja,
+    img: landParcel,
     name: "Katampe Ext. Land Parcel",
     city: "Abuja",
     location: "Katampe Extension",
