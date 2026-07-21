@@ -60,16 +60,46 @@ function Monogram({ className = "" }: { className?: string }) {
 }
 
 function Nav() {
+  const [propsOpen, setPropsOpen] = useState(false);
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cocoa-deep/10 bg-cream/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="#top" className="text-cocoa-deep"><Monogram /></a>
         <nav className="hidden items-center gap-9 text-sm text-cocoa-deep/80 md:flex">
+          <a href="#about" className="hover:text-cocoa-deep">About</a>
           <a href="#services" className="hover:text-cocoa-deep">Services</a>
-          <a href="#properties" className="hover:text-cocoa-deep">Properties</a>
+          <div
+            className="relative"
+            onMouseEnter={() => setPropsOpen(true)}
+            onMouseLeave={() => setPropsOpen(false)}
+          >
+            <a href="#properties" className="hover:text-cocoa-deep" onClick={() => setPropsOpen(false)}>
+              Properties <span className="text-cocoa/50">▾</span>
+            </a>
+            {propsOpen && (
+              <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
+                <div className="min-w-[220px] rounded-sm border border-cocoa-deep/10 bg-cream shadow-elegant">
+                  {[
+                    { h: "#properties", l: "All Properties" },
+                    { h: "#properties-lagos", l: "Lagos" },
+                    { h: "#properties-abuja", l: "Abuja" },
+                    { h: "#properties-land", l: "Land Parcels" },
+                  ].map((i) => (
+                    <a
+                      key={i.h}
+                      href={i.h}
+                      onClick={() => setPropsOpen(false)}
+                      className="block border-b border-cocoa-deep/10 px-5 py-3 text-xs uppercase tracking-[0.18em] text-cocoa-deep transition last:border-b-0 hover:bg-sand hover:text-gold"
+                    >
+                      {i.l}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <a href="#interiors" className="hover:text-cocoa-deep">Interiors</a>
-          <a href="#approach" className="hover:text-cocoa-deep">Approach</a>
-          <a href="#journal" className="hover:text-cocoa-deep">Journal</a>
+          <a href="#contact" className="hover:text-cocoa-deep">Contact</a>
         </nav>
         <a
           href="#contact"
