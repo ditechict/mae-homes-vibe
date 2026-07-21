@@ -1,12 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
-import kitchen from "@/assets/interior-kitchen.jpg";
-import bedroom from "@/assets/interior-bedroom.jpg";
-import dining from "@/assets/interior-dining.jpg";
-import propertyLekki from "@/assets/property-lekki.jpg";
-import propertyAbuja from "@/assets/property-abuja.jpg";
+import kitchenWarmAsset from "@/assets/kitchen-warm.jpg.asset.json";
+import kitchenMarbleAsset from "@/assets/kitchen-marble.jpg.asset.json";
+import livingLuxeAsset from "@/assets/living-luxe.jpg.asset.json";
+import livingClassicAsset from "@/assets/living-classic.jpg.asset.json";
+import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
+import exteriorModernAsset from "@/assets/exterior-modern.jpg.asset.json";
+import exteriorWhiteAsset from "@/assets/exterior-white.jpg.asset.json";
+import landParcel from "@/assets/land-parcel.jpg";
 import founder from "@/assets/founder.jpg";
+
+const kitchenWarm = kitchenWarmAsset.url;
+const kitchenMarble = kitchenMarbleAsset.url;
+const livingLuxe = livingLuxeAsset.url;
+const livingClassic = livingClassicAsset.url;
+const bedroomBeige = bedroomBeigeAsset.url;
+const exteriorModern = exteriorModernAsset.url;
+const exteriorWhite = exteriorWhiteAsset.url;
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -45,16 +56,46 @@ function Monogram({ className = "" }: { className?: string }) {
 }
 
 function Nav() {
+  const [propsOpen, setPropsOpen] = useState(false);
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cocoa-deep/10 bg-cream/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="#top" className="text-cocoa-deep"><Monogram /></a>
         <nav className="hidden items-center gap-9 text-sm text-cocoa-deep/80 md:flex">
+          <a href="#about" className="hover:text-cocoa-deep">About</a>
           <a href="#services" className="hover:text-cocoa-deep">Services</a>
-          <a href="#properties" className="hover:text-cocoa-deep">Properties</a>
+          <div
+            className="relative"
+            onMouseEnter={() => setPropsOpen(true)}
+            onMouseLeave={() => setPropsOpen(false)}
+          >
+            <a href="#properties" className="hover:text-cocoa-deep" onClick={() => setPropsOpen(false)}>
+              Properties <span className="text-cocoa/50">▾</span>
+            </a>
+            {propsOpen && (
+              <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
+                <div className="min-w-[220px] rounded-sm border border-cocoa-deep/10 bg-cream shadow-elegant">
+                  {[
+                    { h: "#properties", l: "All Properties" },
+                    { h: "#properties-lagos", l: "Lagos" },
+                    { h: "#properties-abuja", l: "Abuja" },
+                    { h: "#properties-land", l: "Land Parcels" },
+                  ].map((i) => (
+                    <a
+                      key={i.h}
+                      href={i.h}
+                      onClick={() => setPropsOpen(false)}
+                      className="block border-b border-cocoa-deep/10 px-5 py-3 text-xs uppercase tracking-[0.18em] text-cocoa-deep transition last:border-b-0 hover:bg-sand hover:text-gold"
+                    >
+                      {i.l}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <a href="#interiors" className="hover:text-cocoa-deep">Interiors</a>
-          <a href="#approach" className="hover:text-cocoa-deep">Approach</a>
-          <a href="#journal" className="hover:text-cocoa-deep">Journal</a>
+          <a href="#contact" className="hover:text-cocoa-deep">Contact</a>
         </nav>
         <a
           href="#contact"
@@ -146,7 +187,8 @@ function Marquee() {
 
 function About() {
   return (
-    <section id="approach" className="mx-auto max-w-7xl px-6 py-28 md:py-40">
+    <section id="about" className="mx-auto max-w-7xl px-6 py-28 md:py-40">
+      <span id="approach" className="sr-only" aria-hidden="true" />
       <div className="grid gap-16 md:grid-cols-[1fr_1.2fr] md:gap-24">
         <div>
           <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Our Approach</div>
@@ -278,7 +320,7 @@ type Property = {
 const properties: Property[] = [
   {
     id: "ikota-residence",
-    img: propertyLekki,
+    img: exteriorModern,
     name: "The Ikota Residence",
     city: "Lagos",
     location: "Megamound Estate, Lekki",
@@ -292,7 +334,7 @@ const properties: Property[] = [
   },
   {
     id: "maitama-terrace",
-    img: propertyAbuja,
+    img: exteriorWhite,
     name: "Maitama Terrace",
     city: "Abuja",
     location: "Maitama District",
@@ -306,7 +348,7 @@ const properties: Property[] = [
   },
   {
     id: "oniru-serviced",
-    img: bedroom,
+    img: bedroomBeige,
     name: "Oniru Serviced Apartment",
     city: "Lagos",
     location: "Oniru, Victoria Island",
@@ -320,7 +362,7 @@ const properties: Property[] = [
   },
   {
     id: "asokoro-villa",
-    img: dining,
+    img: livingClassic,
     name: "Asokoro Garden Villa",
     city: "Abuja",
     location: "Asokoro",
@@ -334,7 +376,7 @@ const properties: Property[] = [
   },
   {
     id: "ikoyi-penthouse",
-    img: kitchen,
+    img: livingLuxe,
     name: "Old Ikoyi Penthouse",
     city: "Lagos",
     location: "Bourdillon, Ikoyi",
@@ -348,7 +390,7 @@ const properties: Property[] = [
   },
   {
     id: "katampe-land",
-    img: propertyAbuja,
+    img: landParcel,
     name: "Katampe Ext. Land Parcel",
     city: "Abuja",
     location: "Katampe Extension",
@@ -362,17 +404,34 @@ const properties: Property[] = [
   },
 ];
 
-type CityFilter = "All" | "Lagos" | "Abuja";
-const cityFilters: CityFilter[] = ["All", "Lagos", "Abuja"];
+type CityFilter = "All" | "Lagos" | "Abuja" | "Land";
+const cityFilters: CityFilter[] = ["All", "Lagos", "Abuja", "Land"];
+
+function filterFor(list: typeof properties, city: CityFilter) {
+  if (city === "All") return list;
+  if (city === "Land") return list.filter((p) => p.beds === 0);
+  return list.filter((p) => p.city === city);
+}
 
 function Properties() {
   const [city, setCity] = useState<CityFilter>("All");
   const [active, setActive] = useState<Property | null>(null);
 
-  const visible = useMemo(
-    () => (city === "All" ? properties : properties.filter((p) => p.city === city)),
-    [city],
-  );
+  const visible = useMemo(() => filterFor(properties, city), [city]);
+
+  useEffect(() => {
+    const applyHash = () => {
+      const h = window.location.hash.toLowerCase();
+      if (h === "#properties-lagos") setCity("Lagos");
+      else if (h === "#properties-abuja") setCity("Abuja");
+      else if (h === "#properties-land") setCity("Land");
+      else if (h === "#properties") setCity("All");
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
 
   useEffect(() => {
     if (!active) return;
@@ -403,7 +462,7 @@ function Properties() {
       <div className="mt-12 flex flex-wrap items-center gap-3">
         {cityFilters.map((c) => {
           const activeChip = city === c;
-          const count = c === "All" ? properties.length : properties.filter((p) => p.city === c).length;
+          const count = filterFor(properties, c).length;
           return (
             <button
               key={c}
@@ -546,9 +605,9 @@ function Interiors() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-16 md:grid-cols-[1fr_1fr] md:items-center md:gap-24">
           <div className="grid grid-cols-2 gap-4">
-            <img src={kitchen} alt="Warm minimalist kitchen with arched pantry" className="col-span-2 aspect-[5/4] w-full rounded-sm object-cover shadow-soft" loading="lazy" width={1200} height={1400} />
-            <img src={dining} alt="Elegant dining space" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
-            <img src={bedroom} alt="Warm bedroom design" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
+            <img src={kitchenWarm} alt="Warm timber and marble kitchen with hidden pantry" className="col-span-2 aspect-[5/4] w-full rounded-sm object-cover shadow-soft" loading="lazy" width={1200} height={960} />
+            <img src={kitchenMarble} alt="Modern black and marble kitchen with cove lighting" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
+            <img src={bedroomBeige} alt="Serene beige bedroom in neutral tones" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
           </div>
           <div>
             <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Interiors</div>
