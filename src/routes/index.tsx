@@ -466,7 +466,7 @@ function Properties() {
       <div className="mt-12 flex flex-wrap items-center gap-3">
         {cityFilters.map((c) => {
           const activeChip = city === c;
-          const count = c === "All" ? properties.length : properties.filter((p) => p.city === c).length;
+          const count = filterFor(properties, c).length;
           return (
             <button
               key={c}
