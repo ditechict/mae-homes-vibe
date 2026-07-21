@@ -408,17 +408,34 @@ const properties: Property[] = [
   },
 ];
 
-type CityFilter = "All" | "Lagos" | "Abuja";
-const cityFilters: CityFilter[] = ["All", "Lagos", "Abuja"];
+type CityFilter = "All" | "Lagos" | "Abuja" | "Land";
+const cityFilters: CityFilter[] = ["All", "Lagos", "Abuja", "Land"];
+
+function filterFor(list: typeof properties, city: CityFilter) {
+  if (city === "All") return list;
+  if (city === "Land") return list.filter((p) => p.beds === 0);
+  return list.filter((p) => p.city === city);
+}
 
 function Properties() {
   const [city, setCity] = useState<CityFilter>("All");
   const [active, setActive] = useState<Property | null>(null);
 
-  const visible = useMemo(
-    () => (city === "All" ? properties : properties.filter((p) => p.city === city)),
-    [city],
-  );
+  const visible = useMemo(() => filterFor(properties, city), [city]);
+
+  useEffect(() => {
+    const applyHash = () => {
+      const h = window.location.hash.toLowerCase();
+      if (h === "#properties-lagos") setCity("Lagos");
+      else if (h === "#properties-abuja") setCity("Abuja");
+      else if (h === "#properties-land") setCity("Land");
+      else if (h === "#properties") setCity("All");
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
 
   useEffect(() => {
     if (!active) return;
