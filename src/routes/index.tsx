@@ -352,7 +352,7 @@ const properties: Property[] = [
   },
   {
     id: "oniru-serviced",
-    img: bedroom,
+    img: bedroomBeige,
     name: "Oniru Serviced Apartment",
     city: "Lagos",
     location: "Oniru, Victoria Island",
