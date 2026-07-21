@@ -324,7 +324,7 @@ type Property = {
 const properties: Property[] = [
   {
     id: "ikota-residence",
-    img: propertyLekki,
+    img: exteriorModern,
     name: "The Ikota Residence",
     city: "Lagos",
     location: "Megamound Estate, Lekki",
