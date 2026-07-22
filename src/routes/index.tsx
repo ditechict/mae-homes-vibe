@@ -827,7 +827,7 @@ function Home() {
       <About />
       <Services />
       <Properties />
-      <Interiors />
+      <SignatureWork />
       <Testimonials />
       <Cities />
       <Contact />
