@@ -9,7 +9,9 @@ import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
 import exteriorModernAsset from "@/assets/exterior-modern.jpg.asset.json";
 import exteriorWhiteAsset from "@/assets/exterior-white.jpg.asset.json";
 import landParcel from "@/assets/land-parcel.jpg";
-import founder from "@/assets/founder.jpg";
+import principalAsset from "@/assets/principal.jpg.asset.json";
+
+const principal = principalAsset.url;
 
 const kitchenWarm = kitchenWarmAsset.url;
 const kitchenMarble = kitchenMarbleAsset.url;
@@ -94,8 +96,6 @@ function Nav() {
               </div>
             )}
           </div>
-          <a href="#interiors" className="hover:text-cocoa-deep">Interiors</a>
-          <a href="#contact" className="hover:text-cocoa-deep">Contact</a>
         </nav>
         <a
           href="#contact"
@@ -214,8 +214,8 @@ function About() {
 
         <div className="relative">
           <img
-            src={founder}
-            alt="Founder of Mae & Homes"
+            src={principal}
+            alt="Principal of Mae & Homes"
             className="aspect-[4/5] w-full rounded-sm object-cover shadow-elegant"
             loading="lazy"
             width={1000}
@@ -599,40 +599,39 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
 }
 
 
-function Interiors() {
+function SignatureWork() {
   return (
-    <section id="interiors" className="bg-sand py-28 md:py-40">
+    <section id="signature" className="bg-sand py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-16 md:grid-cols-[1fr_1fr] md:items-center md:gap-24">
-          <div className="grid grid-cols-2 gap-4">
-            <img src={kitchenWarm} alt="Warm timber and marble kitchen with hidden pantry" className="col-span-2 aspect-[5/4] w-full rounded-sm object-cover shadow-soft" loading="lazy" width={1200} height={960} />
-            <img src={kitchenMarble} alt="Modern black and marble kitchen with cove lighting" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
-            <img src={bedroomBeige} alt="Serene beige bedroom in neutral tones" className="aspect-[4/5] w-full rounded-sm object-cover" loading="lazy" width={1200} height={1400} />
-          </div>
+        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Interiors</div>
-            <h2 className="mt-6 font-display text-4xl leading-tight text-cocoa-deep md:text-5xl lg:text-6xl">
-              A kitchen shouldn't just <em className="not-italic text-gold">impress guests</em>. It should make everyday life feel easier.
+            <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Signature Work</div>
+            <h2 className="mt-6 max-w-2xl font-display text-4xl leading-tight text-cocoa-deep md:text-5xl">
+              A kitchen that <em className="not-italic text-gold">makes everyday life</em> feel easier.
             </h2>
-            <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-              Our design studio works on full fit-outs, restyles, and quick furnish
-              packages for new owners. Neutral palettes, warm woods, brass hardware, and
-              a lot of restraint — the kind of rooms you actually want to come home to.
-            </p>
-            <div className="mt-10 grid grid-cols-2 gap-6 border-t border-cocoa-deep/15 pt-8 text-sm text-cocoa-deep">
-              {[
-                ["Timeless Design", "Details that age well."],
-                ["Thoughtful Living", "Space planned around routines."],
-                ["Crafted With Care", "Local makers, considered sourcing."],
-                ["Made For Home", "Not for the camera. For you."],
-              ].map(([t, d]) => (
-                <div key={t}>
-                  <div className="font-display text-xl">{t}</div>
-                  <div className="mt-1 text-muted-foreground">{d}</div>
-                </div>
-              ))}
-            </div>
           </div>
+          <p className="max-w-md text-muted-foreground">
+            Full fit-outs, restyles, and considered furnish packages. Neutral palettes,
+            warm woods, brass hardware — the kind of rooms you actually want to come home to.
+          </p>
+        </div>
+        <div className="mt-14 grid gap-6 md:grid-cols-2">
+          <img
+            src={kitchenWarm}
+            alt="Warm timber and marble kitchen with hidden pantry"
+            className="aspect-[5/4] w-full rounded-sm object-cover shadow-soft"
+            loading="lazy"
+            width={1400}
+            height={1120}
+          />
+          <img
+            src={kitchenMarble}
+            alt="Modern black and marble kitchen with cove lighting"
+            className="aspect-[5/4] w-full rounded-sm object-cover shadow-soft"
+            loading="lazy"
+            width={1400}
+            height={1120}
+          />
         </div>
       </div>
     </section>
@@ -827,7 +826,7 @@ function Home() {
       <About />
       <Services />
       <Properties />
-      <Interiors />
+      <SignatureWork />
       <Testimonials />
       <Cities />
       <Contact />
