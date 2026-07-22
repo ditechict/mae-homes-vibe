@@ -96,8 +96,6 @@ function Nav() {
               </div>
             )}
           </div>
-          <a href="#interiors" className="hover:text-cocoa-deep">Interiors</a>
-          <a href="#contact" className="hover:text-cocoa-deep">Contact</a>
         </nav>
         <a
           href="#contact"
