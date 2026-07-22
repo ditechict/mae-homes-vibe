@@ -216,8 +216,8 @@ function About() {
 
         <div className="relative">
           <img
-            src={founder}
-            alt="Founder of Mae & Homes"
+            src={principal}
+            alt="Principal of Mae & Homes"
             className="aspect-[4/5] w-full rounded-sm object-cover shadow-elegant"
             loading="lazy"
             width={1000}
