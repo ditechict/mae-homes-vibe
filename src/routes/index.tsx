@@ -9,7 +9,9 @@ import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
 import exteriorModernAsset from "@/assets/exterior-modern.jpg.asset.json";
 import exteriorWhiteAsset from "@/assets/exterior-white.jpg.asset.json";
 import landParcel from "@/assets/land-parcel.jpg";
-import founder from "@/assets/founder.jpg";
+import principalAsset from "@/assets/principal.jpg.asset.json";
+
+const principal = principalAsset.url;
 
 const kitchenWarm = kitchenWarmAsset.url;
 const kitchenMarble = kitchenMarbleAsset.url;
