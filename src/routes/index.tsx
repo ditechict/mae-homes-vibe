@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState, useEffect } from "react";
+import { type MouseEvent, useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
-import kitchenWarmAsset from "@/assets/kitchen-warm.jpg.asset.json";
-import kitchenMarbleAsset from "@/assets/kitchen-marble.jpg.asset.json";
 import livingLuxeAsset from "@/assets/living-luxe.jpg.asset.json";
 import livingClassicAsset from "@/assets/living-classic.jpg.asset.json";
 import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
@@ -12,9 +10,6 @@ import landParcel from "@/assets/land-parcel.jpg";
 import principalAsset from "@/assets/principal.jpg.asset.json";
 
 const principal = principalAsset.url;
-
-const kitchenWarm = kitchenWarmAsset.url;
-const kitchenMarble = kitchenMarbleAsset.url;
 const livingLuxe = livingLuxeAsset.url;
 const livingClassic = livingClassicAsset.url;
 const bedroomBeige = bedroomBeigeAsset.url;
@@ -57,21 +52,84 @@ function Monogram({ className = "" }: { className?: string }) {
   );
 }
 
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState<string>(ids[0] ?? "");
+  useEffect(() => {
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [ids]);
+  return active;
+}
+
+function smoothScrollTo(hash: string) {
+  const id = hash.replace(/^#/, "");
+  const el = document.getElementById(id);
+  if (!el) return false;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  history.replaceState(null, "", `#${id}`);
+  return true;
+}
+
 function Nav() {
   const [propsOpen, setPropsOpen] = useState(false);
+  const active = useActiveSection(["about", "services", "properties"]);
+  const links: { id: string; label: string }[] = [
+    { id: "about", label: "About" },
+    { id: "services", label: "Services" },
+  ];
+
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>, hash: string) => {
+    if (smoothScrollTo(hash)) e.preventDefault();
+    setPropsOpen(false);
+  };
+
+  const linkCls = (isActive: boolean) =>
+    `relative transition ${
+      isActive ? "text-cocoa-deep" : "text-cocoa-deep/70 hover:text-cocoa-deep"
+    } after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-gold after:transition-all ${
+      isActive ? "after:w-full" : "after:w-0"
+    }`;
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cocoa-deep/10 bg-cream/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#top" className="text-cocoa-deep"><Monogram /></a>
-        <nav className="hidden items-center gap-9 text-sm text-cocoa-deep/80 md:flex">
-          <a href="#about" className="hover:text-cocoa-deep">About</a>
-          <a href="#services" className="hover:text-cocoa-deep">Services</a>
+        <a href="#top" onClick={(e) => handleClick(e, "#top")} className="text-cocoa-deep"><Monogram /></a>
+        <nav className="hidden items-center gap-9 text-sm md:flex">
+          {links.map((l) => (
+            <a
+              key={l.id}
+              href={`#${l.id}`}
+              onClick={(e) => handleClick(e, `#${l.id}`)}
+              aria-current={active === l.id ? "page" : undefined}
+              className={linkCls(active === l.id)}
+            >
+              {l.label}
+            </a>
+          ))}
           <div
             className="relative"
             onMouseEnter={() => setPropsOpen(true)}
             onMouseLeave={() => setPropsOpen(false)}
           >
-            <a href="#properties" className="hover:text-cocoa-deep" onClick={() => setPropsOpen(false)}>
+            <a
+              href="#properties"
+              onClick={(e) => handleClick(e, "#properties")}
+              aria-current={active === "properties" ? "page" : undefined}
+              className={linkCls(active === "properties")}
+            >
               Properties <span className="text-cocoa/50">▾</span>
             </a>
             {propsOpen && (
@@ -86,7 +144,13 @@ function Nav() {
                     <a
                       key={i.h}
                       href={i.h}
-                      onClick={() => setPropsOpen(false)}
+                      onClick={(e) => {
+                        // Preserve filter hash behavior; still smooth-scroll to properties.
+                        e.preventDefault();
+                        window.location.hash = i.h;
+                        smoothScrollTo("#properties");
+                        setPropsOpen(false);
+                      }}
                       className="block border-b border-cocoa-deep/10 px-5 py-3 text-xs uppercase tracking-[0.18em] text-cocoa-deep transition last:border-b-0 hover:bg-sand hover:text-gold"
                     >
                       {i.l}
@@ -99,6 +163,7 @@ function Nav() {
         </nav>
         <a
           href="#contact"
+          onClick={(e) => handleClick(e, "#contact")}
           className="hidden items-center gap-2 rounded-full bg-cocoa-deep px-5 py-2.5 text-xs uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex"
         >
           Book a Consultation
@@ -117,6 +182,9 @@ function Hero() {
         className="absolute inset-0 h-full w-full object-cover opacity-70"
         width={1600}
         height={1200}
+        fetchPriority="high"
+        decoding="async"
+        sizes="100vw"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-cocoa-deep/70 via-cocoa-deep/50 to-cocoa-deep/95" />
 
@@ -218,8 +286,10 @@ function About() {
             alt="Principal of Mae & Homes"
             className="aspect-[4/5] w-full rounded-sm object-cover shadow-elegant"
             loading="lazy"
+            decoding="async"
             width={1000}
             height={1300}
+            sizes="(min-width: 768px) 55vw, 100vw"
           />
           <div className="absolute -bottom-8 -left-8 hidden max-w-xs bg-cream p-8 shadow-soft md:block">
             <div className="font-display text-2xl text-cocoa-deep">
@@ -489,8 +559,10 @@ function Properties() {
                 alt={`${p.name} — ${p.location}`}
                 className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105"
                 loading="lazy"
+                decoding="async"
                 width={1200}
                 height={1400}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               />
               <span className="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cocoa-deep">
                 {p.status}
@@ -550,6 +622,9 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
             src={property.img}
             alt={`${property.name} — ${property.location}`}
             className="h-64 w-full object-cover md:h-full"
+            loading="lazy"
+            decoding="async"
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
           <span className="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cocoa-deep">
             {property.status}
@@ -599,44 +674,6 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
 }
 
 
-function SignatureWork() {
-  return (
-    <section id="signature" className="bg-sand py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-          <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Signature Work</div>
-            <h2 className="mt-6 max-w-2xl font-display text-4xl leading-tight text-cocoa-deep md:text-5xl">
-              A kitchen that <em className="not-italic text-gold">makes everyday life</em> feel easier.
-            </h2>
-          </div>
-          <p className="max-w-md text-muted-foreground">
-            Full fit-outs, restyles, and considered furnish packages. Neutral palettes,
-            warm woods, brass hardware — the kind of rooms you actually want to come home to.
-          </p>
-        </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
-          <img
-            src={kitchenWarm}
-            alt="Warm timber and marble kitchen with hidden pantry"
-            className="aspect-[5/4] w-full rounded-sm object-cover shadow-soft"
-            loading="lazy"
-            width={1400}
-            height={1120}
-          />
-          <img
-            src={kitchenMarble}
-            alt="Modern black and marble kitchen with cove lighting"
-            className="aspect-[5/4] w-full rounded-sm object-cover shadow-soft"
-            loading="lazy"
-            width={1400}
-            height={1120}
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const testimonials = [
   {
@@ -826,7 +863,7 @@ function Home() {
       <About />
       <Services />
       <Properties />
-      <SignatureWork />
+      
       <Testimonials />
       <Cities />
       <Contact />
