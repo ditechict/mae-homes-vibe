@@ -49,6 +49,9 @@ function Monogram({ className = "" }: { className?: string }) {
         Mae <span className="text-gold">&amp;</span> Homes
       </span>
     </span>
+  );
+}
+
 function useActiveSection(ids: string[]) {
   const [active, setActive] = useState<string>(ids[0] ?? "");
   useEffect(() => {
