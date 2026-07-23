@@ -664,44 +664,6 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
 }
 
 
-function SignatureWork() {
-  return (
-    <section id="signature" className="bg-sand py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-          <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Signature Work</div>
-            <h2 className="mt-6 max-w-2xl font-display text-4xl leading-tight text-cocoa-deep md:text-5xl">
-              A kitchen that <em className="not-italic text-gold">makes everyday life</em> feel easier.
-            </h2>
-          </div>
-          <p className="max-w-md text-muted-foreground">
-            Full fit-outs, restyles, and considered furnish packages. Neutral palettes,
-            warm woods, brass hardware — the kind of rooms you actually want to come home to.
-          </p>
-        </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
-          <img
-            src={kitchenWarm}
-            alt="Warm timber and marble kitchen with hidden pantry"
-            className="aspect-[5/4] w-full rounded-sm object-cover shadow-soft"
-            loading="lazy"
-            width={1400}
-            height={1120}
-          />
-          <img
-            src={kitchenMarble}
-            alt="Modern black and marble kitchen with cove lighting"
-            className="aspect-[5/4] w-full rounded-sm object-cover shadow-soft"
-            loading="lazy"
-            width={1400}
-            height={1120}
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const testimonials = [
   {
