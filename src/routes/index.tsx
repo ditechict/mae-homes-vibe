@@ -182,6 +182,9 @@ function Hero() {
         className="absolute inset-0 h-full w-full object-cover opacity-70"
         width={1600}
         height={1200}
+        fetchPriority="high"
+        decoding="async"
+        sizes="100vw"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-cocoa-deep/70 via-cocoa-deep/50 to-cocoa-deep/95" />
 
