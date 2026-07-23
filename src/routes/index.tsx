@@ -49,24 +49,84 @@ function Monogram({ className = "" }: { className?: string }) {
         Mae <span className="text-gold">&amp;</span> Homes
       </span>
     </span>
-  );
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState<string>(ids[0] ?? "");
+  useEffect(() => {
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [ids]);
+  return active;
+}
+
+function smoothScrollTo(hash: string) {
+  const id = hash.replace(/^#/, "");
+  const el = document.getElementById(id);
+  if (!el) return false;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  history.replaceState(null, "", `#${id}`);
+  return true;
 }
 
 function Nav() {
   const [propsOpen, setPropsOpen] = useState(false);
+  const active = useActiveSection(["about", "services", "properties"]);
+  const links: { id: string; label: string }[] = [
+    { id: "about", label: "About" },
+    { id: "services", label: "Services" },
+  ];
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    if (smoothScrollTo(hash)) e.preventDefault();
+    setPropsOpen(false);
+  };
+
+  const linkCls = (isActive: boolean) =>
+    `relative transition ${
+      isActive ? "text-cocoa-deep" : "text-cocoa-deep/70 hover:text-cocoa-deep"
+    } after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-gold after:transition-all ${
+      isActive ? "after:w-full" : "after:w-0"
+    }`;
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cocoa-deep/10 bg-cream/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#top" className="text-cocoa-deep"><Monogram /></a>
-        <nav className="hidden items-center gap-9 text-sm text-cocoa-deep/80 md:flex">
-          <a href="#about" className="hover:text-cocoa-deep">About</a>
-          <a href="#services" className="hover:text-cocoa-deep">Services</a>
+        <a href="#top" onClick={(e) => handleClick(e, "#top")} className="text-cocoa-deep"><Monogram /></a>
+        <nav className="hidden items-center gap-9 text-sm md:flex">
+          {links.map((l) => (
+            <a
+              key={l.id}
+              href={`#${l.id}`}
+              onClick={(e) => handleClick(e, `#${l.id}`)}
+              aria-current={active === l.id ? "page" : undefined}
+              className={linkCls(active === l.id)}
+            >
+              {l.label}
+            </a>
+          ))}
           <div
             className="relative"
             onMouseEnter={() => setPropsOpen(true)}
             onMouseLeave={() => setPropsOpen(false)}
           >
-            <a href="#properties" className="hover:text-cocoa-deep" onClick={() => setPropsOpen(false)}>
+            <a
+              href="#properties"
+              onClick={(e) => handleClick(e, "#properties")}
+              aria-current={active === "properties" ? "page" : undefined}
+              className={linkCls(active === "properties")}
+            >
               Properties <span className="text-cocoa/50">▾</span>
             </a>
             {propsOpen && (
@@ -81,7 +141,13 @@ function Nav() {
                     <a
                       key={i.h}
                       href={i.h}
-                      onClick={() => setPropsOpen(false)}
+                      onClick={(e) => {
+                        // Preserve filter hash behavior; still smooth-scroll to properties.
+                        e.preventDefault();
+                        window.location.hash = i.h;
+                        smoothScrollTo("#properties");
+                        setPropsOpen(false);
+                      }}
                       className="block border-b border-cocoa-deep/10 px-5 py-3 text-xs uppercase tracking-[0.18em] text-cocoa-deep transition last:border-b-0 hover:bg-sand hover:text-gold"
                     >
                       {i.l}
@@ -94,6 +160,7 @@ function Nav() {
         </nav>
         <a
           href="#contact"
+          onClick={(e) => handleClick(e, "#contact")}
           className="hidden items-center gap-2 rounded-full bg-cocoa-deep px-5 py-2.5 text-xs uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex"
         >
           Book a Consultation
