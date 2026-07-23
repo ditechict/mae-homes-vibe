@@ -622,6 +622,9 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
             src={property.img}
             alt={`${property.name} — ${property.location}`}
             className="h-64 w-full object-cover md:h-full"
+            loading="lazy"
+            decoding="async"
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
           <span className="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cocoa-deep">
             {property.status}
