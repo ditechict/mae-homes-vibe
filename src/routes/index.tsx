@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
-import kitchenWarmAsset from "@/assets/kitchen-warm.jpg.asset.json";
-import kitchenMarbleAsset from "@/assets/kitchen-marble.jpg.asset.json";
 import livingLuxeAsset from "@/assets/living-luxe.jpg.asset.json";
 import livingClassicAsset from "@/assets/living-classic.jpg.asset.json";
 import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
@@ -12,9 +10,6 @@ import landParcel from "@/assets/land-parcel.jpg";
 import principalAsset from "@/assets/principal.jpg.asset.json";
 
 const principal = principalAsset.url;
-
-const kitchenWarm = kitchenWarmAsset.url;
-const kitchenMarble = kitchenMarbleAsset.url;
 const livingLuxe = livingLuxeAsset.url;
 const livingClassic = livingClassicAsset.url;
 const bedroomBeige = bedroomBeigeAsset.url;
