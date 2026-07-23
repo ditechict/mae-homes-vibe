@@ -91,7 +91,7 @@ function Nav() {
     { id: "services", label: "Services" },
   ];
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>, hash: string) => {
     if (smoothScrollTo(hash)) e.preventDefault();
     setPropsOpen(false);
   };
