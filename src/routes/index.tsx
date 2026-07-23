@@ -286,8 +286,10 @@ function About() {
             alt="Principal of Mae & Homes"
             className="aspect-[4/5] w-full rounded-sm object-cover shadow-elegant"
             loading="lazy"
+            decoding="async"
             width={1000}
             height={1300}
+            sizes="(min-width: 768px) 55vw, 100vw"
           />
           <div className="absolute -bottom-8 -left-8 hidden max-w-xs bg-cream p-8 shadow-soft md:block">
             <div className="font-display text-2xl text-cocoa-deep">
