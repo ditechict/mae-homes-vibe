@@ -559,8 +559,10 @@ function Properties() {
                 alt={`${p.name} — ${p.location}`}
                 className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105"
                 loading="lazy"
+                decoding="async"
                 width={1200}
                 height={1400}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               />
               <span className="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cocoa-deep">
                 {p.status}
