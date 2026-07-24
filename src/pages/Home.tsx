@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { type MouseEvent, useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
 import livingLuxeAsset from "@/assets/living-luxe.jpg.asset.json";
@@ -16,24 +16,16 @@ const bedroomBeige = bedroomBeigeAsset.url;
 const exteriorModern = exteriorModernAsset.url;
 const exteriorWhite = exteriorWhiteAsset.url;
 
-export const Route = createFileRoute("/")({
-  component: Home,
-  head: () => ({
-    meta: [
-      { title: "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" },
-      { name: "description", content: "Trusted real estate and interior design partner across Lagos, Abuja and the Diaspora. Browse curated properties, land and investment opportunities." },
-      { property: "og:title", content: "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" },
-      { property: "og:description", content: "Boutique real estate and interior design firm in Lagos and Abuja. Land, residential, commercial and considered interiors." },
-      { property: "og:url", content: "/" },
-      { property: "og:image", content: heroLiving },
-      { name: "twitter:title", content: "Mae & Homes — Real Estate & Interior Design" },
-      { name: "twitter:description", content: "Curated homes, land and interiors across Lagos & Abuja." },
-      { name: "twitter:image", content: heroLiving },
-    ],
-    links: [{ rel: "canonical", href: "/" }],
-  }),
-});
-
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  name: "Mae & Homes",
+  description:
+    "Boutique real estate and interior design firm in Lagos and Abuja, Nigeria.",
+  areaServed: ["Lagos", "Abuja"],
+  telephone: "+2348029026160",
+  email: "maeandhomes@gmail.com",
+};
 
 function Monogram({ className = "" }: { className?: string }) {
   return (
@@ -145,7 +137,6 @@ function Nav() {
                       key={i.h}
                       href={i.h}
                       onClick={(e) => {
-                        // Preserve filter hash behavior; still smooth-scroll to properties.
                         e.preventDefault();
                         window.location.hash = i.h;
                         smoothScrollTo("#properties");
@@ -502,7 +493,6 @@ function Properties() {
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
 
-
   useEffect(() => {
     if (!active) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActive(null);
@@ -672,8 +662,6 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
     </div>
   );
 }
-
-
 
 const testimonials = [
   {
@@ -854,20 +842,36 @@ function Footer() {
   );
 }
 
-function Home() {
+export default function Home() {
   return (
-    <main className="bg-cream">
-      <Nav />
-      <Hero />
-      <Marquee />
-      <About />
-      <Services />
-      <Properties />
-      
-      <Testimonials />
-      <Cities />
-      <Contact />
-      <Footer />
-    </main>
+    <>
+      <Helmet>
+        <title>Mae &amp; Homes — Real Estate &amp; Interior Design | Lagos &amp; Abuja</title>
+        <meta name="description" content="Trusted real estate and interior design partner across Lagos, Abuja and the Diaspora. Browse curated properties, land and investment opportunities." />
+        <link rel="canonical" href="/" />
+        <meta property="og:title" content="Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" />
+        <meta property="og:description" content="Boutique real estate and interior design firm in Lagos and Abuja. Land, residential, commercial and considered interiors." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="/" />
+        <meta property="og:image" content={heroLiving} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Mae & Homes — Real Estate & Interior Design" />
+        <meta name="twitter:description" content="Curated homes, land and interiors across Lagos & Abuja." />
+        <meta name="twitter:image" content={heroLiving} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+      <main className="bg-cream">
+        <Nav />
+        <Hero />
+        <Marquee />
+        <About />
+        <Services />
+        <Properties />
+        <Testimonials />
+        <Cities />
+        <Contact />
+        <Footer />
+      </main>
+    </>
   );
 }
