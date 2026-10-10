@@ -8,6 +8,7 @@ import exteriorModernAsset from "@/assets/exterior-modern.jpg.asset.json";
 import exteriorWhiteAsset from "@/assets/exterior-white.jpg.asset.json";
 import landParcel from "@/assets/land-parcel.jpg";
 import principalAsset from "@/assets/principal.jpg.asset.json";
+import logoAsset from "@/assets/mae-logo.webp.asset.json";
 
 const principal = principalAsset.url;
 const livingLuxe = livingLuxeAsset.url;
@@ -25,10 +26,10 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Mae & Homes — Real Estate & Interior Design | Lagos & Abuja" },
       { property: "og:description", content: "Boutique real estate and interior design firm in Lagos and Abuja. Land, residential, commercial and considered interiors." },
       { property: "og:url", content: "/" },
-      { property: "og:image", content: heroLiving },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Mae & Homes — Real Estate & Interior Design" },
       { name: "twitter:description", content: "Curated homes, land and interiors across Lagos & Abuja." },
-      { name: "twitter:image", content: heroLiving },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
@@ -37,18 +38,14 @@ export const Route = createFileRoute("/")({
 
 function Monogram({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
-      <span className="relative grid h-9 w-9 place-items-center rounded-sm border border-gold/60 bg-cocoa-deep text-gold">
-        <svg viewBox="0 0 32 32" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M6 26V10l10-6 10 6v16" />
-          <path d="M6 26h20" />
-          <path d="M13 26v-7h6v7" />
-        </svg>
-      </span>
-      <span className="font-display text-lg tracking-wide">
-        Mae <span className="text-gold">&amp;</span> Homes
-      </span>
-    </span>
+    <img
+      src={logoAsset.url}
+      alt="Mae & Homes — Real Estate, Interior Design, Intelligent Investments"
+      width={828}
+      height={461}
+      decoding="async"
+      className={`h-14 w-auto object-contain ${className}`}
+    />
   );
 }
 
