@@ -1,21 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { properties, type Property, whatsappFor } from "@/lib/properties";
 import { type MouseEvent, useMemo, useState, useEffect } from "react";
 import heroLiving from "@/assets/hero-living.jpg";
-import livingLuxeAsset from "@/assets/living-luxe.jpg.asset.json";
-import livingClassicAsset from "@/assets/living-classic.jpg.asset.json";
-import bedroomBeigeAsset from "@/assets/bedroom-beige.jpg.asset.json";
-import exteriorModernAsset from "@/assets/exterior-modern.jpg.asset.json";
-import exteriorWhiteAsset from "@/assets/exterior-white.jpg.asset.json";
-import landParcel from "@/assets/land-parcel.jpg";
 import principalAsset from "@/assets/principal.jpg.asset.json";
 import logoAsset from "@/assets/mae-logo.webp.asset.json";
 
 const principal = principalAsset.url;
-const livingLuxe = livingLuxeAsset.url;
-const livingClassic = livingClassicAsset.url;
-const bedroomBeige = bedroomBeigeAsset.url;
-const exteriorModern = exteriorModernAsset.url;
-const exteriorWhite = exteriorWhiteAsset.url;
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -370,107 +360,6 @@ function Services() {
   );
 }
 
-type Property = {
-  id: string;
-  img: string;
-  name: string;
-  city: "Lagos" | "Abuja";
-  location: string;
-  price: string;
-  specs: string;
-  status: "For Sale" | "For Lease" | "Off-Plan";
-  beds: number;
-  description: string;
-  features: string[];
-};
-
-const properties: Property[] = [
-  {
-    id: "ikota-residence",
-    img: exteriorModern,
-    name: "The Ikota Residence",
-    city: "Lagos",
-    location: "Megamound Estate, Lekki",
-    price: "₦550M",
-    specs: "5 Bed · Detached Duplex · BQ · Pool",
-    status: "For Sale",
-    beds: 5,
-    description:
-      "A quietly grand five-bedroom detached duplex set behind mature landscaping in Megamound. Double-height living, a chef's kitchen, and a private pool courtyard designed for slow evenings.",
-    features: ["Private pool", "Chef's kitchen", "Staff quarters", "Smart security", "24/7 estate power", "Governor's Consent"],
-  },
-  {
-    id: "maitama-terrace",
-    img: exteriorWhite,
-    name: "Maitama Terrace",
-    city: "Abuja",
-    location: "Maitama District",
-    price: "₦480M",
-    specs: "4 Bed · Contemporary · Smart Home",
-    status: "For Sale",
-    beds: 4,
-    description:
-      "A contemporary four-bedroom terrace in the heart of Maitama. Warm oak joinery, integrated smart-home controls, and a north-facing garden that stays cool through the harmattan.",
-    features: ["Smart home", "Solar backup", "Fitted wardrobes", "Landscaped garden", "CofO", "Gated cluster"],
-  },
-  {
-    id: "oniru-serviced",
-    img: bedroomBeige,
-    name: "Oniru Serviced Apartment",
-    city: "Lagos",
-    location: "Oniru, Victoria Island",
-    price: "₦85M/yr",
-    specs: "3 Bed · Fully Furnished · Concierge",
-    status: "For Lease",
-    beds: 3,
-    description:
-      "A fully furnished three-bedroom serviced apartment moments from Landmark. Concierge, gym, and a rooftop lounge — designed for executives and long-stay diaspora clients.",
-    features: ["Fully furnished", "Concierge", "Gym & pool", "Backup power", "Short & long lease"],
-  },
-  {
-    id: "asokoro-villa",
-    img: livingClassic,
-    name: "Asokoro Garden Villa",
-    city: "Abuja",
-    location: "Asokoro",
-    price: "₦720M",
-    specs: "6 Bed · Villa · Cinema · Staff Wing",
-    status: "For Sale",
-    beds: 6,
-    description:
-      "A six-bedroom garden villa on a quiet Asokoro cul-de-sac. Formal and family living wings, a private cinema, and a dedicated staff block with separate entry.",
-    features: ["Private cinema", "Formal dining", "Staff wing", "Borehole", "Mature garden", "CofO"],
-  },
-  {
-    id: "ikoyi-penthouse",
-    img: livingLuxe,
-    name: "Old Ikoyi Penthouse",
-    city: "Lagos",
-    location: "Bourdillon, Ikoyi",
-    price: "₦1.2B",
-    specs: "4 Bed · Penthouse · Private Lift",
-    status: "Off-Plan",
-    beds: 4,
-    description:
-      "A rare full-floor penthouse on Bourdillon with private lift lobby, wraparound terrace and lagoon views. Delivery Q3 next year — a considered investment position.",
-    features: ["Private lift", "Wraparound terrace", "Lagoon views", "Concierge", "Off-plan pricing"],
-  },
-  {
-    id: "katampe-land",
-    img: landParcel,
-    name: "Katampe Ext. Land Parcel",
-    city: "Abuja",
-    location: "Katampe Extension",
-    price: "₦180M",
-    specs: "1,200 sqm · CofO · Corner Piece",
-    status: "For Sale",
-    beds: 0,
-    description:
-      "A 1,200 sqm corner parcel in one of Abuja's most closely watched growth corridors. Fully documented with CofO — ready to build or hold.",
-    features: ["1,200 sqm", "Corner piece", "CofO", "Tarred road", "Growth corridor"],
-  },
-];
-
 type CityFilter = "All" | "Lagos" | "Abuja" | "Land";
 const cityFilters: CityFilter[] = ["All", "Lagos", "Abuja", "Land"];
 
@@ -521,9 +410,14 @@ function Properties() {
             A quiet edit of what's on the market.
           </h2>
         </div>
-        <a href="#contact" className="gold-underline text-sm uppercase tracking-[0.2em] text-cocoa-deep">
-          Request the full list →
-        </a>
+        <div className="flex flex-col gap-3 md:items-end">
+          <Link to="/properties" className="gold-underline text-sm uppercase tracking-[0.2em] text-cocoa-deep">
+            Search the full catalogue →
+          </Link>
+          <Link to="/insights" className="text-xs uppercase tracking-[0.2em] text-cocoa hover:text-gold">
+            Buyer guides &amp; insights
+          </Link>
+        </div>
       </div>
 
       <div className="mt-12 flex flex-wrap items-center gap-3">
@@ -647,6 +541,12 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
               ))}
             </ul>
           </div>
+          {!property.verified && (
+            <p className="mt-6 text-xs text-muted-foreground">Sample listing — details awaiting owner verification.</p>
+          )}
+          <Link to="/properties/$id" params={{ id: property.id }} className="mt-4 gold-underline self-start text-xs uppercase tracking-[0.2em] text-cocoa-deep">
+            Full details · {property.ref} →
+          </Link>
           <div className="mt-auto flex flex-wrap gap-3 pt-8">
             <a
               href="#contact"
@@ -656,7 +556,7 @@ function PropertyModal({ property, onClose }: { property: Property; onClose: () 
               Request a viewing
             </a>
             <a
-              href={`https://wa.me/2348029026160?text=${encodeURIComponent(`Hi Mae & Homes, I'd like to know more about ${property.name} (${property.location}).`)}`}
+              href={whatsappFor(property)}
               target="_blank"
               rel="noreferrer"
               className="flex-1 rounded-full border border-cocoa-deep/30 px-6 py-3.5 text-center text-xs uppercase tracking-[0.2em] text-cocoa-deep transition hover:border-gold hover:text-gold"
@@ -830,7 +730,7 @@ function Footer() {
             </p>
           </div>
           {[
-            { h: "Company", l: ["Approach", "Services", "Careers", "Journal"] },
+            { h: "Company", l: ["Approach", "Services", "Insights"] },
             { h: "Practice", l: ["Sales", "Land & Investment", "Interior Design", "Management"] },
             { h: "Contact", l: ["+234 802 902 6160", "maeandhomes@gmail.com", "@maeandhomes"] },
           ].map((c) => (
