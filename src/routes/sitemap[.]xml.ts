@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { properties } from "@/lib/properties";
+import { insights } from "@/lib/insights";
 
 // TODO: replace with your project URL once a project name or custom domain is set.
-const BASE_URL = "";
+const BASE_URL = "https://mae-homes-vibe.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -10,6 +12,10 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/properties", changefreq: "weekly", priority: "0.9" },
+          { path: "/insights", changefreq: "monthly", priority: "0.7" },
+          ...properties.map((p) => ({ path: `/properties/${p.id}`, changefreq: "weekly", priority: "0.8" })),
+          ...insights.map((i) => ({ path: `/insights/${i.slug}`, changefreq: "monthly", priority: "0.6" })),
         ];
         const urls = entries.map(
           (e) =>
