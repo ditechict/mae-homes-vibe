@@ -72,6 +72,8 @@ function smoothScrollTo(hash: string) {
 
 function Nav() {
   const [propsOpen, setPropsOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
   const active = useActiveSection(["about", "services", "properties"]);
   const links: { id: string; label: string }[] = [
     { id: "about", label: "About" },
@@ -147,6 +149,7 @@ function Nav() {
               </div>
             )}
           </div>
+          <Link to="/insights" className={linkCls(false)}>Insights</Link>
         </nav>
         <a
           href="#contact"
@@ -155,7 +158,62 @@ function Nav() {
         >
           Book a Consultation
         </a>
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-cocoa-deep transition hover:bg-sand/70 md:hidden"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+            {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+          </svg>
+        </button>
       </div>
+      {menuOpen && (
+        <nav aria-label="Mobile" className="border-t border-cocoa-deep/10 bg-cream/95 backdrop-blur-xl md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 pb-6 pt-3">
+            {[
+              { h: "#about", l: "About" },
+              { h: "#services", l: "Services" },
+              { h: "#properties", l: "Properties" },
+              { h: "#properties-lagos", l: "— Lagos listings" },
+              { h: "#properties-abuja", l: "— Abuja listings" },
+              { h: "#properties-land", l: "— Land parcels" },
+            ].map((i) => (
+              <a
+                key={i.h}
+                href={i.h}
+                onClick={(e) => {
+                  if (smoothScrollTo(i.h)) e.preventDefault();
+                  closeMenu();
+                }}
+                className="rounded-md px-3 py-3 text-base text-cocoa-deep/80 transition hover:bg-sand/50 hover:text-cocoa-deep"
+              >
+                {i.l}
+              </a>
+            ))}
+            <Link
+              to="/insights"
+              onClick={closeMenu}
+              className="rounded-md px-3 py-3 text-base font-medium text-cocoa-deep transition hover:bg-sand/50"
+            >
+              Insights
+            </Link>
+            <a
+              href="#contact"
+              onClick={(e) => {
+                if (smoothScrollTo("#contact")) e.preventDefault();
+                closeMenu();
+              }}
+              className="mt-3 rounded-full bg-cocoa-deep px-5 py-3 text-center text-[11px] uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa"
+            >
+              Consult
+            </a>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }
@@ -174,6 +232,7 @@ function Hero() {
         sizes="100vw"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-cocoa-deep/70 via-cocoa-deep/50 to-cocoa-deep/95" />
+      <div className="absolute inset-0 bg-gradient-to-r from-cocoa-deep/50 via-cocoa-deep/20 to-transparent" />
 
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-end px-6 pb-16 pt-40 md:pb-24">
         <div className="mb-10 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-gold-soft">
@@ -195,12 +254,12 @@ function Hero() {
             and the Diaspora. We negotiate the right deal, source the right land, and
             design the rooms that make a house feel like home.
           </p>
-          <div className="flex flex-wrap items-center gap-4">
-            <a href="#properties" className="rounded-full bg-gold px-7 py-4 text-xs uppercase tracking-[0.2em] text-cocoa-deep transition hover:bg-gold-soft">
-              View Portfolio
-            </a>
+          <div className="flex flex-col items-start gap-5">
             <a href="#contact" className="rounded-full border border-cream/40 px-7 py-4 text-xs uppercase tracking-[0.2em] text-cream transition hover:border-gold hover:text-gold">
               Speak With Us
+            </a>
+            <a href="#properties" className="gold-underline text-xs uppercase tracking-[0.2em] text-cream/75 transition hover:text-gold">
+              View properties →
             </a>
           </div>
         </div>
