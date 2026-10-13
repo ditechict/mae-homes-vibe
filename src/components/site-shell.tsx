@@ -27,9 +27,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <a href="/#about" className={navCls}>About</a>
             <a href="/#services" className={navCls}>Services</a>
             <Link to="/properties" className={navCls} activeProps={{ className: "text-cocoa-deep gold-underline" }}>Properties</Link>
+            <Link to="/insights" className={navCls} activeProps={{ className: "text-cocoa-deep gold-underline" }}>Insights</Link>
           </nav>
-          <a href="/#contact" className="hidden rounded-full bg-cocoa-deep px-5 py-2.5 text-xs uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex">
-            Book a Consultation
+          <a href="/#contact" className="hidden rounded-full bg-cocoa-deep px-5 py-2.5 text-[10px] uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex">
+            Consult
           </a>
         </div>
       </header>
