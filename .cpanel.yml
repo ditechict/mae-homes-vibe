@@ -1,13 +1,13 @@
 ---
 deployment:
   tasks:
-    # change CPANELUSER to your cPanel username (example: /home/youruser/public_html)
-    - export DEPLOYPATH=/home/mckijbol/repositories/mae-home
+    # deploy into the web root inside the repository for this cPanel account
+    - export DEPLOYPATH=/home/mckijbol/repositories/mae-home/public_html
 
     # install dependencies and build (runs in the cPanel repo directory)
     - /usr/bin/env bash -lc "npm ci --no-audit --prefer-offline || true"
     - /usr/bin/env bash -lc "npm run build"
 
-    # copy build output (Vite default: dist/) into public_html safely
+    # copy build output (Vite default: dist/) into the web root safely
     - /usr/bin/env bash -lc "/bin/mkdir -p \"$DEPLOYPATH\""
     - /usr/bin/env bash -lc "/bin/cp -r dist/. \"$DEPLOYPATH\""
