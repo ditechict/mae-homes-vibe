@@ -154,9 +154,9 @@ function Nav() {
         <a
           href="#contact"
           onClick={(e) => handleClick(e, "#contact")}
-          className="hidden items-center gap-2 rounded-full bg-cocoa-deep px-5 py-2.5 text-xs uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex"
+          className="hidden items-center gap-2 rounded-full bg-cocoa-deep px-5 py-2.5 text-[10px] uppercase tracking-[0.18em] text-cream transition hover:bg-cocoa md:inline-flex"
         >
-          Book a Consultation
+          Consult
         </a>
         <button
           type="button"
