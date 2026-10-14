@@ -1,8 +1,13 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/CPANELUSER/public_html
-    - /usr/bin/env bash -lc "npm install --no-audit --no-fund"
+    # change CPANELUSER to your cPanel username (example: /home/youruser/public_html)
+    - export DEPLOYPATH=/home/mckijbol/repositories/mae-home
+
+    # install dependencies and build (runs in the cPanel repo directory)
+    - /usr/bin/env bash -lc "npm ci --no-audit --prefer-offline || true"
     - /usr/bin/env bash -lc "npm run build"
-    - /bin/mkdir -p "$DEPLOYPATH"
-    - /bin/cp -r dist/. "$DEPLOYPATH"
+
+    # copy build output (Vite default: dist/) into public_html safely
+    - /usr/bin/env bash -lc "/bin/mkdir -p \"$DEPLOYPATH\""
+    - /usr/bin/env bash -lc "/bin/cp -r dist/. \"$DEPLOYPATH\""
