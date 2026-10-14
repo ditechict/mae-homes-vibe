@@ -1,0 +1,14 @@
+{
+  "name": "Node Codespace for cPanel Deploy",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode-remote.remote-ssh",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y rsync openssh-client || true && chmod +x scripts/deploy-codespace.sh",
+  "remoteUser": "vscode"
+}
