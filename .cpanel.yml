@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/CPANELUSER/public_html
+    - /usr/bin/env bash -lc "npm install --no-audit --no-fund"
+    - /usr/bin/env bash -lc "npm run build"
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - /bin/cp -r dist/. "$DEPLOYPATH"
