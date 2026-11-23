@@ -2,3 +2,4 @@
 
 - [x] Mobile menu with Insights prominent + persistent highlight on Insights pages (home header + site-shell.tsx) — verified via Playwright
 - [x] Hero: soft readability overlay, quiet 'View properties →' link, 'View Portfolio' button removed — composition preserved
+- [x] Improve catalogue search, filters, navigation, and no-results guidance — verified via Playwright

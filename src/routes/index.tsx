@@ -123,7 +123,7 @@ function Nav() {
             </a>
             {propsOpen && (
               <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
-                <div className="min-w-[220px] rounded-sm border border-cocoa-deep/10 bg-cream shadow-elegant">
+                <div className="min-w-[260px] rounded-sm border border-cocoa-deep/10 bg-cream shadow-elegant">
                   {[
                     { h: "#properties", l: "All Properties" },
                     { h: "#properties-lagos", l: "Lagos" },
@@ -145,6 +145,30 @@ function Nav() {
                       {i.l}
                     </a>
                   ))}
+                  <div className="border-t border-cocoa-deep/10 px-5 py-3">
+                    <Link
+                      to="/properties"
+                      className="inline-flex whitespace-nowrap gold-underline text-xs uppercase tracking-[0.14em] text-cocoa-deep"
+                    >
+                      Open full catalogue →
+                    </Link>
+                    <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-cocoa/80">
+                      {[
+                        { label: "Lagos", city: "Lagos" },
+                        { label: "Abuja", city: "Abuja" },
+                        { label: "Land", city: "Land" },
+                      ].map((option) => (
+                        <Link
+                          key={option.city}
+                          to="/properties"
+                          search={{ city: option.city }}
+                          className="hover:text-cocoa-deep"
+                        >
+                          {option.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -194,6 +218,32 @@ function Nav() {
                 {i.l}
               </a>
             ))}
+            <div className="mt-2 border-t border-cocoa-deep/10 px-3 pt-4">
+              <Link
+                to="/properties"
+                onClick={closeMenu}
+                className="gold-underline text-xs uppercase tracking-[0.14em] text-cocoa-deep"
+              >
+                Open full catalogue →
+              </Link>
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                {[
+                  { label: "Lagos", city: "Lagos" },
+                  { label: "Abuja", city: "Abuja" },
+                  { label: "Land", city: "Land" },
+                ].map((option) => (
+                  <Link
+                    key={option.city}
+                    to="/properties"
+                    search={{ city: option.city }}
+                    onClick={closeMenu}
+                    className="py-1 text-sm text-cocoa-deep/75 hover:text-cocoa-deep"
+                  >
+                    {option.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
             <Link
               to="/insights"
               onClick={closeMenu}

@@ -34,7 +34,7 @@ export const Route = createFileRoute("/properties/")({
 });
 
 const priceOptions = [
-  { v: 0, l: "Any budget" },
+  { v: 0, l: "No maximum" },
   { v: 200_000_000, l: "Up to ₦200M" },
   { v: 500_000_000, l: "Up to ₦500M" },
   { v: 800_000_000, l: "Up to ₦800M" },
@@ -52,7 +52,20 @@ function Catalogue() {
   const results = useMemo(() => {
     const q = s.q.trim().toLowerCase();
     let list = properties.filter((p) => {
-      if (q && ![p.name, p.location, p.city, p.ref].some((f) => f.toLowerCase().includes(q))) return false;
+      const searchable = [
+        p.name,
+        p.location,
+        p.city,
+        p.ref,
+        p.status,
+        p.type,
+        p.specs,
+        p.description,
+        ...p.features,
+      ];
+      if (q && !searchable.some((field) => field.toLowerCase().includes(q))) {
+        return false;
+      }
       if (s.city === "Land" ? p.type !== "Land" : s.city !== "All" && p.city !== s.city) return false;
       if (s.status !== "All" && p.status !== s.status) return false;
       if (s.type !== "All" && p.type !== s.type) return false;
@@ -69,47 +82,158 @@ function Catalogue() {
   const pages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const page = Math.min(Math.max(1, s.page), pages);
   const shown = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const activeFilters = [
+    s.q.trim() ? `Search: “${s.q.trim()}”` : null,
+    s.city !== "All" ? `Location: ${s.city === "Land" ? "Land parcels" : s.city}` : null,
+    s.status !== "All" ? `Status: ${s.status}` : null,
+    s.type !== "All" ? `Type: ${s.type}` : null,
+    s.beds > 0 ? `${s.beds}+ bedrooms` : null,
+    s.maxPrice > 0 ? `Budget: up to ₦${(s.maxPrice / 1_000_000).toLocaleString()}M` : null,
+  ].filter((filter): filter is string => filter !== null);
 
   return (
     <SiteShell>
       <section className="mx-auto max-w-7xl px-6 py-16 md:py-24">
         <div className="text-xs uppercase tracking-[0.3em] text-cocoa">— Catalogue</div>
-        <h1 className="mt-4 font-display text-4xl text-cocoa-deep md:text-6xl">Find your next address.</h1>
+        <h1 className="mt-4 font-display text-4xl text-cocoa-deep md:text-6xl">
+          Find your next address.
+        </h1>
         <p className="mt-4 max-w-2xl text-muted-foreground">
-          Search by neighbourhood, city, property name or listing reference. Listings marked “awaiting verification” are samples pending owner confirmation.
+          Search names, neighbourhoods, listing references, property types, features or
+          specifications. Listings marked “awaiting verification” are samples pending owner
+          confirmation.
         </p>
 
+        <nav
+          className="mt-6 flex flex-wrap items-center gap-2"
+          aria-label="Browse properties by location"
+        >
+          <span className="mr-1 text-[10px] uppercase tracking-[0.18em] text-cocoa">
+            Browse by location
+          </span>
+          {[
+            { label: "Lagos", city: "Lagos" },
+            { label: "Abuja", city: "Abuja" },
+            { label: "Land parcels", city: "Land" },
+          ].map((option) => (
+            <Link
+              key={option.city}
+              to="/properties"
+              search={{ city: option.city }}
+              className={`rounded-sm border px-3 py-2 text-xs transition ${
+                s.city === option.city
+                  ? "border-cocoa-deep bg-cocoa-deep text-cream"
+                  : "border-cocoa-deep/20 text-cocoa-deep hover:border-cocoa-deep/50 hover:bg-sand/50"
+              }`}
+              aria-current={s.city === option.city ? "page" : undefined}
+            >
+              {option.label}
+            </Link>
+          ))}
+        </nav>
+
         <div className="mt-10 grid gap-4 rounded-sm border border-cocoa-deep/10 bg-sand/40 p-5 md:grid-cols-4 lg:grid-cols-7">
-          <label className="md:col-span-4 lg:col-span-2">
+          <label className="flex flex-col gap-1.5 md:col-span-4 lg:col-span-2">
             <span className={labelCls}>Search</span>
-            <input className={fieldCls} value={s.q} placeholder="e.g. Lekki, Maitama, MH-LG-001" onChange={(e) => set({ q: e.target.value })} />
+            <input
+              className={fieldCls}
+              value={s.q}
+              placeholder="e.g. Lekki, pool, MH-LG-001"
+              onChange={(e) => set({ q: e.target.value })}
+            />
           </label>
-          <label><span className={labelCls}>City</span>
-            <select className={fieldCls} value={s.city} onChange={(e) => set({ city: e.target.value })}>
-              {["All", "Lagos", "Abuja", "Land"].map((c) => <option key={c}>{c}</option>)}
+          <label className="flex flex-col gap-1.5">
+            <span className={labelCls}>City or land</span>
+            <select
+              className={fieldCls}
+              value={s.city}
+              onChange={(e) => set({ city: e.target.value })}
+            >
+              {["All", "Lagos", "Abuja", "Land"].map((c) => (
+                <option key={c} value={c}>
+                  {c === "All" ? "All locations" : c === "Land" ? "Land parcels" : c}
+                </option>
+              ))}
             </select>
           </label>
-          <label><span className={labelCls}>Status</span>
-            <select className={fieldCls} value={s.status} onChange={(e) => set({ status: e.target.value })}>
-              {["All", ...propertyStatuses].map((c) => <option key={c}>{c}</option>)}
+          <label className="flex flex-col gap-1.5">
+            <span className={labelCls}>Listing status</span>
+            <select
+              className={fieldCls}
+              value={s.status}
+              onChange={(e) => set({ status: e.target.value })}
+            >
+              {["All", ...propertyStatuses].map((c) => (
+                <option key={c} value={c}>
+                  {c === "All" ? "Any status" : c}
+                </option>
+              ))}
             </select>
           </label>
-          <label><span className={labelCls}>Type</span>
-            <select className={fieldCls} value={s.type} onChange={(e) => set({ type: e.target.value })}>
-              {["All", ...propertyTypes].map((c) => <option key={c}>{c}</option>)}
+          <label className="flex flex-col gap-1.5">
+            <span className={labelCls}>Property type</span>
+            <select
+              className={fieldCls}
+              value={s.type}
+              onChange={(e) => set({ type: e.target.value })}
+            >
+              {["All", ...propertyTypes].map((c) => (
+                <option key={c} value={c}>
+                  {c === "All" ? "Any type" : c}
+                </option>
+              ))}
             </select>
           </label>
-          <label><span className={labelCls}>Bedrooms</span>
-            <select className={fieldCls} value={s.beds} onChange={(e) => set({ beds: Number(e.target.value) })}>
-              {[0, 3, 4, 5, 6].map((b) => <option key={b} value={b}>{b ? `${b}+` : "Any"}</option>)}
+          <label className="flex flex-col gap-1.5">
+            <span className={labelCls}>Minimum bedrooms</span>
+            <select
+              className={fieldCls}
+              value={s.beds}
+              onChange={(e) => set({ beds: Number(e.target.value) })}
+            >
+              {[0, 3, 4, 5, 6].map((b) => (
+                <option key={b} value={b}>
+                  {b ? `${b}+ bedrooms` : "Any number"}
+                </option>
+              ))}
             </select>
           </label>
-          <label><span className={labelCls}>Budget</span>
-            <select className={fieldCls} value={s.maxPrice} onChange={(e) => set({ maxPrice: Number(e.target.value) })}>
-              {priceOptions.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
+          <label className="flex flex-col gap-1.5">
+            <span className={labelCls}>Maximum budget</span>
+            <select
+              className={fieldCls}
+              value={s.maxPrice}
+              onChange={(e) => set({ maxPrice: Number(e.target.value) })}
+            >
+              {priceOptions.map((o) => (
+                <option key={o.v} value={o.v}>
+                  {o.l}
+                </option>
+              ))}
             </select>
           </label>
         </div>
+
+        {activeFilters.length > 0 && (
+          <div className="mt-5 flex flex-wrap items-center gap-2" aria-label="Active filters">
+            <span className="mr-1 text-[10px] uppercase tracking-[0.18em] text-cocoa">Showing</span>
+            {activeFilters.map((filter) => (
+              <span
+                key={filter}
+                className="rounded-sm border border-cocoa-deep/15 bg-card px-3 py-1.5 text-xs text-cocoa-deep"
+              >
+                {filter}
+              </span>
+            ))}
+            <Link
+              to="/properties"
+              search={{}}
+              className="ml-1 gold-underline text-xs text-cocoa-deep"
+            >
+              Clear all
+            </Link>
+          </div>
+        )}
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm">
           <div className="text-cocoa-deep" aria-live="polite">{results.length} {results.length === 1 ? "property" : "properties"}</div>
@@ -125,8 +249,23 @@ function Catalogue() {
         </div>
 
         {shown.length === 0 ? (
-          <div className="mt-12 rounded-sm border border-dashed border-cocoa-deep/20 p-16 text-center text-muted-foreground">
-            No listings match these filters. Try widening your budget or <a href="/#contact" className="gold-underline text-cocoa-deep">tell us what you're looking for</a>.
+          <div
+            className="mt-12 rounded-sm border border-dashed border-cocoa-deep/20 px-6 py-12 text-center"
+            role="status"
+          >
+            <h2 className="font-display text-3xl text-cocoa-deep">No properties match these choices.</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Try increasing your budget, choosing a nearby location, or removing one of the
+              filters. You can also tell us what you have in mind.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-5 text-xs uppercase tracking-[0.14em]">
+              <Link to="/properties" search={{}} className="gold-underline text-cocoa-deep">
+                Clear all filters
+              </Link>
+              <a href="/#contact" className="gold-underline text-cocoa-deep">
+                Share what you’re looking for
+              </a>
+            </div>
           </div>
         ) : (
           <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
